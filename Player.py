@@ -1,14 +1,12 @@
-# player.py
-
 import pygame
+from settings import screen_width, screen_height
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((50, 50))  # Oyuncu için bir yüzey
-        self.image.fill((0, 255, 0))  # Oyuncu rengini yeşil yapıyoruz
+        self.image = pygame.image.load('assets/playerShip2_blue.png').convert_alpha()
         self.rect = self.image.get_rect()
-        self.rect.center = (400, 500)  # Başlangıç pozisyonu
+        self.rect.center = (screen_width // 2, screen_height - 70)
 
     def update(self):
         keys = pygame.key.get_pressed()
@@ -16,7 +14,9 @@ class Player(pygame.sprite.Sprite):
             self.rect.x -= 5
         if keys[pygame.K_RIGHT]:
             self.rect.x += 5
-        if keys[pygame.K_UP]:
-            self.rect.y -= 5
-        if keys[pygame.K_DOWN]:
-            self.rect.y += 5
+
+        # Ekran sınırları
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.right > screen_width:
+            self.rect.right = screen_width
