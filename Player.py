@@ -1,23 +1,22 @@
-from settings import screen_width, screen_height, white  
+# player.py
+
 import pygame
 
-
 class Player(pygame.sprite.Sprite):
-    def _init_(self):
-        super()._init_()
-        self.image = pygame.Surface((50, 50)) 
-        self.image.fill(white)  
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface((50, 50))  # Oyuncu için bir yüzey
+        self.image.fill((0, 255, 0))  # Oyuncu rengini yeşil yapıyoruz
         self.rect = self.image.get_rect()
-        self.rect.center = (screen_width // 2, screen_height - 50)  
-        self.speed = 5  
+        self.rect.center = (400, 500)  # Başlangıç pozisyonu
 
     def update(self):
-        keys = pygame.key.get_pressed()  
-        if keys[pygame.K_LEFT] and self.rect.left > 0:
-            self.rect.x -= self.speed
-        if keys[pygame.K_RIGHT] and self.rect.right < screen_width:
-            self.rect.x += self.speed
-        if keys[pygame.K_UP] and self.rect.top > 0:
-            self.rect.y -= self.speed
-        if keys[pygame.K_DOWN] and self.rect.bottom < screen_height:
-            self.rect.y += self.speed
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            self.rect.x -= 5
+        if keys[pygame.K_RIGHT]:
+            self.rect.x += 5
+        if keys[pygame.K_UP]:
+            self.rect.y -= 5
+        if keys[pygame.K_DOWN]:
+            self.rect.y += 5
