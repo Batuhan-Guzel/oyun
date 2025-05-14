@@ -1,11 +1,26 @@
-from main import screen, screen_width, screen_height, white, red, black, font  
+import pygame
+import random
 from player import Player
 from enemy import Enemy
 from bullet import Bullet
-import pygame
-import random
+
+screen_width = 800
+screen_height = 600
+white = (255, 255, 255)
+red = (255, 0, 0)
+black = (0, 0, 0)
+
+pygame.init()
+
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Space Shooter")
 
 clock = pygame.time.Clock()
+
+score = 0
+lives = 3
+
+font = pygame.font.SysFont(None, 30)
 
 class Game:
     def _init_(self):
@@ -63,9 +78,7 @@ class Game:
                     bullet.kill()
 
             self.show_score_lives()
-
             self.all_sprites.draw(screen)
-
             self.enemies.update()
 
             pygame.display.update()
