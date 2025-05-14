@@ -4,9 +4,7 @@ from player import Player
 from enemy import Enemy
 from bullet import Bullet
 
-screen_width = 800
-screen_height = 600
-white = (255, 255, 255)
+
 red = (255, 0, 0)
 black = (0, 0, 0)
 
@@ -23,7 +21,7 @@ lives = 3
 font = pygame.font.SysFont(None, 30)
 
 class Game:
-    def _init_(self):
+    def __init__(self):  # _init_ yerine __init__ kullanıldı
         self.all_sprites = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
@@ -86,6 +84,6 @@ class Game:
 
         pygame.quit()
 
-if _name_ == "_main_":
+if __name__ == "__main__":  # _name_ yerine __name__ ve _main_ yerine __main__ kullanıldı
     game = Game()
     game.game_loop()

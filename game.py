@@ -73,6 +73,6 @@ class Game:
 
         pygame.quit()
 
-if _name_ == "_main_":
+if __name__ == "_main_":
     game = Game()
     game.game_loop()

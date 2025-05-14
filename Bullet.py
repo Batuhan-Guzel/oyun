@@ -1,5 +1,6 @@
-from main import screen_width, screen_height, white  
+from settings import screen_width, screen_height, white  
 import pygame
+
 
 
 class Bullet(pygame.sprite.Sprite):
