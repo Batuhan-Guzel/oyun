@@ -1,12 +1,12 @@
 import pygame
-import os
+import sys
+import os 
 from settings import screen_width, screen_height, white, red, black
 from player import Player
 from enemy import Enemy  
 from stronge_enemy import StrongEnemy
 from bullet import Bullet
 from explosion import Explosion
-import sys
 
 class Intro:
     def __init__(self, screen):
@@ -53,9 +53,8 @@ class Intro:
             self.clock.tick(30)  # FPS ayarı
 
 class Game:
-    def __init__(self):
-        self.screen = pygame.display.set_mode((screen_width, screen_height))
-        pygame.display.set_caption("Space Shooter")
+    def __init__(self, screen):
+        self.screen = screen
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont(None, 30)
 
@@ -102,25 +101,20 @@ class Game:
         game_over_text = over_font.render("Game Over! Press R to Restart", True, red)
         self.screen.blit(game_over_text, (screen_width // 4, screen_height // 2))
 
-    def wait_for_exit_or_restart(self):
-        font = pygame.font.SysFont(None, 50)
-        restart_text = font.render("Press R to Restart or ESC to Quit", True, red)
+    def wait_for_restart(self):
         waiting = True
         while waiting:
             self.screen.fill(black)
             self.game_over()
-            self.screen.blit(restart_text, (screen_width // 5, screen_height // 2 + 60))
             pygame.display.update()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                if event.type == pygame.KEYDOWN:
+                elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_r:
                         waiting = False
-                        self.__init__()
-                        self.game_loop()
                     elif event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         sys.exit()
@@ -144,15 +138,14 @@ class Game:
                     if event.key == pygame.K_x and self.show_upgrade_msg:
                         self.bullet_damage = 2
                         self.show_upgrade_msg = False
-                    if event.key == pygame.K_r and self.lives <= 0:
-                        self.__init__()
 
             if self.lives <= 0:
                 self.lives = 0
                 self.game_over()
                 pygame.display.update()
-                self.wait_for_exit_or_restart()
-                break
+                self.wait_for_restart()
+                self.__init__(self.screen)
+                continue
 
             current_time = pygame.time.get_ticks()
             if current_time - self.strong_enemy_timer > self.strong_enemy_interval:
@@ -205,14 +198,16 @@ class Game:
 
         pygame.quit()
 
+
 if __name__ == "__main__":
     pygame.init()
     pygame.font.init()
+
     screen = pygame.display.set_mode((screen_width, screen_height))
-    pygame.display.set_caption("Space Shooter")
+    pygame.display.set_caption("Space Wanderers")
 
     intro = Intro(screen)
     intro.play()
 
-    game = Game()
+    game = Game(screen)
     game.game_loop()

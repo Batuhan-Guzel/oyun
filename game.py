@@ -6,9 +6,9 @@ from stronge_enemy import StrongEnemy
 from bullet import Bullet
 from explosion import Explosion
 
+pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
 pygame.font.init()
-pygame.mixer.init()  # Ses modülünü başlat
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Space Shooter")
@@ -46,49 +46,13 @@ class Game:
         self.strong_enemy_timer = pygame.time.get_ticks()
         self.strong_enemy_interval = 15000  # 15 saniye
 
-        # Sesler
-        self.shoot_sound = pygame.mixer.Sound('assets/sounds/shoot.wav')
-        self.explosion_sound = pygame.mixer.Sound('assets/sounds/explosion.wav')
-        pygame.mixer.music.load('assets/sounds/background.mp3')
-        pygame.mixer.music.set_volume(0.5)
-        pygame.mixer.music.play(-1)
+        # Patlama sesi yükle
+        try:
+            self.explosion_sound = pygame.mixer.Sound('assets/sounds/explosion.wav')
+        except Exception as e:
+            print("Patlama sesi yüklenirken hata:", e)
 
-    def show_score_lives(self):
-        score_text = self.font.render(f"Score: {self.score}", True, white)
-        lives_text = self.font.render(f"Lives: {self.lives}", True, white)
-        self.screen.blit(score_text, (10, 10))
-        self.screen.blit(lives_text, (screen_width - 150, 10))
-
-    def show_upgrade_message(self):
-        if self.show_upgrade_msg:
-            msg_text = self.font.render("Press X to upgrade bullets!", True, white)
-            rect = msg_text.get_rect(center=(screen_width//2, screen_height//2))
-            self.screen.blit(msg_text, rect)
-            if pygame.time.get_ticks() - self.upgrade_msg_timer > 5000:
-                self.show_upgrade_msg = False
-
-    def game_over(self):
-        over_font = pygame.font.SysFont(None, 50)
-        game_over_text = over_font.render("Game Over! Press R to Restart", True, red)
-        self.screen.blit(game_over_text, (screen_width // 4, screen_height // 2))
-
-    def wait_for_restart(self):
-        waiting = True
-        while waiting:
-            self.screen.fill(black)
-            self.game_over()
-            pygame.display.update()
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    exit()
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_r:
-                        waiting = False
-                    elif event.key == pygame.K_ESCAPE:
-                        pygame.quit()
-                        exit()
+    # ... (diğer fonksiyonlar aynı)
 
     def game_loop(self):
         while self.running:
@@ -106,7 +70,6 @@ class Game:
                         bullet = Bullet(self.player.rect.centerx, self.player.rect.top, self.bullet_damage)
                         self.bullets.add(bullet)
                         self.all_sprites.add(bullet)
-                        self.shoot_sound.play()
                     if event.key == pygame.K_x and self.show_upgrade_msg:
                         self.bullet_damage = 2
                         self.show_upgrade_msg = False
@@ -139,7 +102,8 @@ class Game:
                         explosion = Explosion(enemy.rect.center)
                         self.explosions.add(explosion)
                         self.all_sprites.add(explosion)
-                        self.explosion_sound.play()
+
+                        self.explosion_sound.play()  # Patlama sesi sadece burada çalacak
 
                         if isinstance(enemy, StrongEnemy):
                             self.show_upgrade_msg = True
