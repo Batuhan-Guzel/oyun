@@ -4,7 +4,7 @@ from settings import screen_width, screen_height
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load('assets/playerShip2_blue.png').convert_alpha()
+        self.image = pygame.image.load('assets/playerShip.png').convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.center = (screen_width // 2, screen_height - 70)
 
@@ -15,7 +15,6 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_RIGHT]:
             self.rect.x += 5
 
-        # Ekran sınırları
         if self.rect.left < 0:
             self.rect.left = 0
         if self.rect.right > screen_width:
