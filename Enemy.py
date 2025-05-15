@@ -11,7 +11,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.y = random.randint(-100, -40)
 
         self.health = random.randint(5, 10)
-        self.speed = max(0.5, 3.0 - self.health * 0.2)
+        self.speed = max(1, 5.0 - self.health * 0.2)
 
         self.move_delay = 3
         self.move_counter = 0
